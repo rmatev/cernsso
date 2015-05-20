@@ -1,6 +1,9 @@
 # cern-sso
 Python wrappers above cern-get-sso-cookie.
 
+Assumptions are:
+ * You have cern-get-sso-cookie on your system installed
+ * You have your CERN user certificate in some secure directory named `myCert.pem` and `myCert.key`
 
 Basic usage:
 ```python
