@@ -2,6 +2,8 @@ import os
 import time
 import sqlite3
 import tempfile
+import cookielib
+import json
 from tempfile import mkstemp
 from urlparse import urlparse
 
@@ -10,7 +12,7 @@ from sh import cern_get_sso_cookie
 
 DB_FILENAME = "cookie.db"
 ROT_TIME = 24 * 60 * 60 # 24 hours
-    
+
 
 class CookieManager(object):
     """Obtain your CERN cookies here!"""
@@ -48,7 +50,7 @@ class CookieManager(object):
         if int(time.time()) - last_update > ROT_TIME:
             return self.get_new_cookie(url)
 
-        return cookie
+        return json.loads(cookie)
 
     def get_new_cookie(self, url):
         _, cookietmp = mkstemp(prefix='.tmp', dir=self.workdir, text=True)
@@ -60,14 +62,16 @@ class CookieManager(object):
             o=cookietmp
         )
 
-        with open(cookietmp) as f:
-            cookie = f.read()
+        cj = cookielib.MozillaCookieJar(cookietmp)
+        cj.load()
+
+        cookiedict = {c.name: c.value  for c in cj}
 
         os.remove(cookietmp)
 
-        self._save_cookie(url, cookie)
+        self._save_cookie(url, json.dumps(cookiedict))
 
-        return cookie
+        return cookiedict
 
     def _save_cookie(self, url, cookie):
         self.cursor.execute(

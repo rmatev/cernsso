@@ -12,8 +12,13 @@ from cernsso.cookie import CookieManager
 # Directory should contain myCert.pem, myCert.key and be writable
 m = CookieManager("/your/private/directory")
 
+url = "http://eindex.cern.ch/"
+
 # This cookie should be used with your http requests
-print m.get_cookie("http://eindex.cern.ch/")
+cookies = m.get_cookie(url)
+
+import requests
+r = requests.get(url, cookies=cookies)
 ```
 
 

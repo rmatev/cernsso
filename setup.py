@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='cern-sso',
-    version='0.1.0',
+    version='0.1.1',
     url='https://github.com/scr4t/cernsso',
     author='Alexander Baranov',
     author_email='sashab1@yandex-team.ru',
