@@ -18,7 +18,7 @@ url = "http://eindex.cern.ch/"
 cookies = m.get_cookie(url)
 
 import requests
-r = requests.get(url, cookies=cookies)
+r = requests.get(url, cookies=cookies) # probably will fail without export REQUESTS_CA_BUNDLE=/etc/ssl/certs/CERNGridCertificationAuthority.pem
 ```
 
 
