@@ -65,7 +65,7 @@ class CookieManager(object):
         cj = cookielib.MozillaCookieJar(cookietmp)
         cj.load()
 
-        cookiedict = {c.name: c.value  for c in cj}
+        cookiedict = dict([(c.name, c.value) for c in cj])
 
         os.remove(cookietmp)
 
