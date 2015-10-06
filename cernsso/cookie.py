@@ -52,20 +52,20 @@ class CookieManager(object):
 
         return json.loads(cookie)
 
-    def get_new_cookie(self, url):
+    def get_new_cookie(self, url, use_certs = True):
         _, cookietmp = mkstemp(prefix='.tmp', dir=self.workdir, text=True)
-        cern_get_sso_cookie(
-            cert=self.certpath,
-            key=self.keypath,
-            r=True,
-            u=url,
-            o=cookietmp
-        )
+        params_dict = {"r": True,
+                       "u": url,
+                       "o": cookietmp}
+        if use_certs:
+            params_dict.update({"cert": self.certpath,
+                                "key": self.keypath})
 
+        cern_get_sso_cookie(**params_dict)
         cj = cookielib.MozillaCookieJar(cookietmp)
         cj.load()
 
-        cookiedict = {c.name: c.value  for c in cj}
+        cookiedict = dict([(c.name, c.value) for c in cj])
 
         os.remove(cookietmp)
 
